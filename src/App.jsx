@@ -45,11 +45,25 @@ function App() {
         message: "Submitting your feedback...",
       });
 
-      console.log("Feedback submitted:", formData);
+      const response = await fetch(
+        "http://localhost:5678/webhook-test/student-feedback",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Submission failed");
+      }
 
       setStatus({
         type: "success",
-        message: "Thank you for your feedback! Your response has been received successfully.",
+        message:
+          "Thank you for your feedback! Your response has been received successfully.",
       });
 
       setFormData({
@@ -73,7 +87,8 @@ function App() {
         <div className="card-header">
           <h1>Share Your Course Feedback</h1>
           <p>
-            Fill in the form below to send feedback about your learning experience.
+            Fill in the form below to send feedback about your learning
+            experience.
           </p>
         </div>
 
