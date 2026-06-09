@@ -1,0 +1,459 @@
+{
+  "name": "Student Feedback",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "student-feedback",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -800,
+        -64
+      ],
+      "id": "6e3a53e3-0f70-482c-8a91-d93a159f0f51",
+      "name": "Webhook",
+      "webhookId": "b7de0141-1f2c-464f-bfdb-ccd18dccbefb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7e314400-d0bf-4b9c-b462-93e262053199",
+              "leftValue": "={{ $json.body.rating }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -96,
+        -272
+      ],
+      "id": "c2e84c70-92ce-445f-9dcb-19ce7a1f07b8",
+      "name": "Rating Check"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a0b6f028-e71b-4703-b18f-69be3286c96a",
+              "name": "Status",
+              "value": "Needs Attention",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        -368
+      ],
+      "id": "e2aef175-6779-4f0d-a9d4-4916f3f3d476",
+      "name": "Needs Attention"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b02e1137-e14d-4c55-ba9f-c3971d4a61c7",
+              "name": "Status",
+              "value": "Positive Feedback",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        -192
+      ],
+      "id": "d1b3d1fd-7950-4187-a7d7-7c84becdcfa6",
+      "name": "Positive Feedback"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Feedback received\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        800,
+        -288
+      ],
+      "id": "c9c446cc-ddaf-42d5-9937-5ed7f216db6c",
+      "name": "Feedback Successfully Recieved"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": false,\n  \"message\": \"Missing required fields. Please complete all fields and try again.\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -176,
+        32
+      ],
+      "id": "dd968d90-e8aa-4ad9-9849-1d41b06941d0",
+      "name": "Feedback Invalid"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9792cb39-468f-43a9-91a9-a5b53c6894a5",
+              "leftValue": "={{ $('Webhook').item.json.body.studentName }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "69e4c514-55a9-44a7-84c7-2799f85302a6",
+              "leftValue": "={{ $('Webhook').item.json.body.email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f2eb076d-af4d-4cb0-b94b-4e11b4b02102",
+              "leftValue": "={{ $('Webhook').item.json.body.courseName }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "3926eeda-cc06-4e52-8e98-e0093c77cbeb",
+              "leftValue": "={{ $('Webhook').item.json.body.rating }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "cbb97153-9256-462f-8883-b1ca043af82e",
+              "leftValue": "={{ $('Webhook').item.json.body.message }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -560,
+        -64
+      ],
+      "id": "752b3c96-56f4-42d4-8371-93497fb33393",
+      "name": "Feedback Validator"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1QU1_iK-tMKArQz6OAyqBNS4FQ0oDazuaexE0IjmbYK8",
+          "mode": "list",
+          "cachedResultName": "Student Feedback",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QU1_iK-tMKArQz6OAyqBNS4FQ0oDazuaexE0IjmbYK8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1QU1_iK-tMKArQz6OAyqBNS4FQ0oDazuaexE0IjmbYK8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Student Name": "={{ $('Feedback Validator').item.json.body.studentName }}",
+            "Email": "={{ $('Feedback Validator').item.json.body.email }}",
+            "Course Name": "={{ $('Feedback Validator').item.json.body.courseName }}",
+            "Rating": "={{ $('Feedback Validator').item.json.body.rating }}",
+            "Feedback": "={{ $('Feedback Validator').item.json.body.message }}",
+            "Date": "={{ $now }}",
+            "Status": "={{ $json.Status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Student Name",
+              "displayName": "Student Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Course Name",
+              "displayName": "Course Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Rating",
+              "displayName": "Rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        -288
+      ],
+      "id": "43fa7611-44fd-4610-bda7-1b474450fa27",
+      "name": "Add Info To Google Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wai9RiqvwlrZRI0N",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Feedback Recieved",
+        "emailType": "text",
+        "message": "=Hello {{ $json['Student Name'] }},\n\nThank you for your feedback regarding the following course: {{ $json[\"Course Name\"] }}.\n\nYour response has been received successfully.\n\nKind regards\nStudent Feedback System",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        576,
+        -288
+      ],
+      "id": "6a1d712e-7d61-443f-be57-084998893de9",
+      "name": "Send Confirmation Email",
+      "webhookId": "f40f1b0f-518e-462b-9884-dae0a9f23580",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "vPy14p74yRMfBo1s",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Feedback Validator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rating Check": {
+      "main": [
+        [
+          {
+            "node": "Needs Attention",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Positive Feedback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Attention": {
+      "main": [
+        [
+          {
+            "node": "Add Info To Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Positive Feedback": {
+      "main": [
+        [
+          {
+            "node": "Add Info To Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feedback Successfully Recieved": {
+      "main": [
+        []
+      ]
+    },
+    "Feedback Validator": {
+      "main": [
+        [
+          {
+            "node": "Rating Check",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Feedback Invalid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Info To Google Sheet": {
+      "main": [
+        [
+          {
+            "node": "Send Confirmation Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Confirmation Email": {
+      "main": [
+        [
+          {
+            "node": "Feedback Successfully Recieved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7ea335f2-b2d5-42d7-81e4-7350788fac2a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "52618f391db7e68757094f78bd68efcc86c0942769c4a223a0a9297457b0d014"
+  },
+  "nodeGroups": [],
+  "id": "Ah2RGGZZnhh8axz7",
+  "tags": []
+}
