@@ -2,6 +2,13 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -14,7 +21,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: clamp(18px, 5vw, 40px);
 }
 
 .feedback-card {
@@ -22,27 +29,29 @@ body {
   max-width: 620px;
   background: white;
   border-radius: 24px;
-  padding: 36px;
+  padding: clamp(22px, 5vw, 36px);
   box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
 }
 
 .card-header {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: clamp(22px, 4vw, 28px);
 }
 
 .tag {
   margin: 0 0 10px;
   color: #2563eb;
-  font-size: 0.8rem;
+  font-size: clamp(0.68rem, 2.4vw, 0.8rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .card-header h1 {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2rem, 8vw, 3rem);
+  line-height: 1.05;
   color: #111827;
 }
 
@@ -51,12 +60,13 @@ body {
   max-width: 480px;
   color: #6b7280;
   line-height: 1.6;
+  font-size: clamp(0.9rem, 3vw, 1rem);
 }
 
 .feedback-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: clamp(14px, 3vw, 18px);
 }
 
 .form-group {
@@ -68,6 +78,7 @@ body {
 label {
   font-weight: 700;
   color: #374151;
+  font-size: clamp(0.92rem, 3vw, 1rem);
 }
 
 input,
@@ -76,7 +87,7 @@ textarea {
   width: 100%;
   border: 1px solid #d1d5db;
   border-radius: 14px;
-  padding: 14px 16px;
+  padding: clamp(12px, 3.5vw, 14px) clamp(13px, 4vw, 16px);
   font-size: 1rem;
   font-family: inherit;
   background: #f9fafb;
@@ -94,17 +105,18 @@ textarea:focus {
 }
 
 textarea {
-  min-height: 130px;
+  min-height: clamp(110px, 25vw, 130px);
   resize: vertical;
 }
 
 button {
+  width: 100%;
   border: none;
   border-radius: 14px;
   padding: 15px 18px;
   background: #2563eb;
   color: white;
-  font-size: 1rem;
+  font-size: clamp(0.95rem, 3vw, 1rem);
   font-weight: 800;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
@@ -121,6 +133,7 @@ button:hover {
   border-radius: 14px;
   font-weight: 700;
   line-height: 1.5;
+  font-size: clamp(0.9rem, 3vw, 1rem);
 }
 
 .status-message.success {
@@ -136,4 +149,48 @@ button:hover {
 .status-message.loading {
   background: #dbeafe;
   color: #1e40af;
+}
+
+/* responsive code */
+
+@media (max-width: 420px) {
+  .page {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .feedback-card {
+    border-radius: 18px;
+    padding: 20px 16px;
+  }
+
+  .card-header h1 {
+    font-size: clamp(1.85rem, 10vw, 2.25rem);
+  }
+}
+
+@media (max-width: 340px) {
+  .page {
+    padding: 10px;
+  }
+
+  .feedback-card {
+    padding: 18px 12px;
+    border-radius: 16px;
+  }
+
+  .tag {
+    letter-spacing: 0.05em;
+  }
+
+  .card-header h1 {
+    font-size: 1.8rem;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    border-radius: 12px;
+  }
 }
